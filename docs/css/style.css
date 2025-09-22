@@ -1,0 +1,93 @@
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f0f0f0;
+  margin: 0;
+}
+
+header {
+  text-align: center;
+  background: #4a90e2;
+  color: #fff;
+  padding: 2rem 1rem;
+}
+
+.carousel {
+  position: relative;
+  max-width: 700px;      /* largeur maximale */
+  margin: 2rem auto;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+
+.slide {
+  display: none;
+  position: relative;
+}
+
+.slide img {
+  width: 100%;
+  height: auto;
+  max-height: 450px;     /* hauteur maximale */
+  object-fit: cover;     /* recadre sans déformation */
+  border-radius: 20px;
+}
+
+.caption {
+  position: absolute;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  width: 100%;
+  text-align: center;
+  padding: 1rem;
+  font-size: 1.5rem;
+  border-radius: 0 0 20px 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -30px;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 2rem;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  background: rgba(0,0,0,0.4);
+}
+
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+.prev:hover, .next:hover {
+  background: rgba(0,0,0,0.6);
+}
+
+.dots {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 4px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.3s;
+}
+
+.active, .dot:hover {
+  background-color: #4a90e2;
+}
+
