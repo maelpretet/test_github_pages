@@ -1,0 +1,662 @@
+---
+params:
+  sp_name: "Amaryllis"
+title: "Maquette espèce"
+format:
+  dashboard:
+    scrolling: false
+    nav-buttons:
+      - icon: github
+        href: https://github.com/maelpretet/test_github_pages
+      - icon: arrow-bar-left
+        href: index.html
+    embed-resources: true
+execute:
+  echo: false
+  message : false
+  warning : false
+  error : false
+---
+
+```{r}
+# Variables constantes
+sp_name = params$sp_name
+source("fonctions/var.R")
+is.histo = FALSE
+```
+
+<!-- ####################################################################### -->
+
+# `r params$sp_name` {orientation="columns"}
+
+```{r}
+# Librairies
+source("fonctions/library.R")
+```
+
+```{r}
+# Fonctions et environnement
+if (Sys.getenv("CI") != "true") {
+  readRenviron(".env")
+}
+# source("fonctions/carte.R")
+source("fonctions/function_graphics.R")
+# Création des data frame
+source("fonctions/create_df_opj.R")
+source("fonctions/create_df_one_sp.R")
+```
+
+## Images
+
+### Photo {height="70%"}
+
+```{r}
+if (file.exists(paste0("data/photos/", sp_name, ".jpg"))) {
+  file_img = paste0("data/photos/", sp_name, ".jpg")
+  image_read(file_img)
+}else{
+  print("Photographie")
+}
+```
+
+### Logo  {height="30%"}
+
+```{r}
+file_img = paste0("data/img/logo_obj_ope_papillons.png")
+image_read(file_img)
+```
+
+## Texte
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+<!-- ####################################################################### -->
+
+# Chiffres clés {orientation="columns"}
+
+## Texte {width="20%"}
+
+### Infobulle
+
+::: {.valuebox icon="eye" color="#ced600"}
+Nombre de fois où au moins un individu a été observé :
+
+`r paste0(label_number(accuracy = 10)(nb_obs_idv), " sur ", label_number(accuracy = 10)(nrow(df_sp)), " observations")`
+:::
+
+### Infobulle
+
+::: {.valuebox icon=none color="#5bbdd6"}
+Les participants ont compté `r paste0(label_number(accuracy = 10)(nb_idv_cpt), " ", sp_name, " sur les ", label_number(accuracy = 10)(sum(df_opj$taxon_count)), " papillons au total.")`
+:::
+
+### Explication {width="60%"}
+
+Classement : `r paste0(which(rev(df_repartition$taxon) == sp_name), "/", length(df_repartition$taxon))`
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+## Graphiques {height="80%"}
+
+:::panel-tabset
+### 2019-2024
+```{r}
+gg_histo_plotly(df_hp = df_repartition, limits = df_repartition$taxon,
+                couleur = df_repartition$couleur)
+
+# print("plotly repartition espece")
+```
+
+### 2006-2018
+```{r}
+gg_histo_plotly(df_hp = df_repartition_old, limits = df_repartition_old$taxon,
+                couleur = df_repartition_old$couleur)
+
+# print("plotly repartition espece")
+```
+
+### 2006-2024
+```{r}
+gg_histo_plotly(df_hp = df_repartition_new_old, limits = df_repartition_new_old$taxon,
+                couleur = df_repartition_new_old$couleur)
+
+# print("plotly repartition espece")
+```
+:::
+
+# Cartographie {orientation="columns"}
+
+## Textes {width="30%"}
+
+### Texte 1
+
+::: {.callout-note icon=false}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+:::
+
+### Texte 2
+
+::: {.callout-note icon=false}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+:::
+
+## Graphiques {width="70%"}
+
+::::panel-tabset
+
+### Jardins
+
+:::panel-tabset
+
+#### 2019-2024
+```{r}
+carte_point_jardin(france = france, df_jp = df_jardin_point,
+                   title = paste0("Positions des jardins ayant participé entre ",
+                                  strftime(min(df_sp$session_date), "%Y"), " et ",
+                                  strftime(max(df_sp$session_date), "%Y")))
+```
+
+#### 2006-2018
+```{r}
+carte_point_jardin(france = france, df_jp = df_jardin_point_old,
+                   title = paste0("Positions des jardins ayant participé entre ",
+                                  strftime(min(df_sp$session_date), "%Y"), " et ",
+                                  strftime(max(df_sp$session_date), "%Y")))
+```
+
+#### 2006-2024
+```{r}
+carte_point_jardin(france = france, df_jp = df_jardin_point_new_old,
+                   title = paste0("Positions des jardins ayant participé entre ",
+                                  strftime(min(df_sp$session_date), "%Y"), " et ",
+                                  strftime(max(df_sp$session_date), "%Y")))
+```
+:::
+
+### Abondance par département
+
+:::panel-tabset
+#### 2019-2024
+```{r}
+print(carte_ab(shape_map = france, fill_map = df_dep_new$cl_qual, fill_color = couleurs,
+         fill_cat = cat_carte_tendance_moy, fill_title = "Abondance relative entre 2019 et 2024",
+         map_title = paste0("Carte de distribution de l'abondance relative de l'espèce ", sp_name)))
+
+```
+
+#### 2006-2018
+```{r}
+print(carte_ab(shape_map = france, fill_map = df_dep_old$cl_qual, fill_color = couleurs,
+         fill_cat = cat_carte_tendance_moy, fill_title = "Abondance relative entre 2006 et 2018",
+         map_title = paste0("Carte de distribution de l'abondance relative de l'espèce ", sp_name)))
+
+```
+
+#### 2006-2024
+```{r}
+print(carte_ab(shape_map = france, fill_map = df_dep$cl_qual, fill_color = couleurs,
+         fill_cat = cat_carte_tendance_moy, fill_title = "Abondance relative entre 2006 et 2024",
+         map_title = paste0("Carte de distribution de l'abondance relative de l'espèce ", sp_name)))
+
+```
+
+:::
+
+### Abondance par région
+
+:::panel-tabset
+#### 2019-2024
+```{r}
+print(carte_ab(shape_map = france_reg, fill_map = df_reg_new$cl_qual, fill_color = couleurs,
+         fill_cat = cat_carte_tendance_moy, fill_title = "Abondance relative entre 2019 et 2024",
+         map_title = paste0("Carte de distribution de l'abondance relative de l'espèce ", sp_name)))
+
+```
+
+#### 2006-2018
+```{r}
+print(carte_ab(shape_map = france_reg, fill_map = df_reg_old$cl_qual, fill_color = couleurs,
+         fill_cat = cat_carte_tendance_moy, fill_title = "Abondance relative entre 2006 et 2018",
+         map_title = paste0("Carte de distribution de l'abondance relative de l'espèce ", sp_name)))
+
+```
+
+#### 2006-2024
+```{r}
+print(carte_ab(shape_map = france_reg, fill_map = df_reg$cl_qual, fill_color = couleurs,
+         fill_cat = cat_carte_tendance_moy, fill_title = "Abondance relative entre 2006 et 2024",
+         map_title = paste0("Carte de distribution de l'abondance relative de l'espèce ", sp_name)))
+
+```
+:::
+
+### % jardins
+
+:::panel-tabset
+#### 2019-2024
+```{r}
+print(carte_ab(shape_map = france, fill_map = df_dep_new$cl_jard, fill_color = couleurs,
+         fill_cat = cat_carte_jard, fill_title = "% jardins observés entre 2019 et 2024",
+         map_title = paste0("Carte de distribution des jardins avec présence de l'espèce ", sp_name)))
+
+```
+
+#### 2006-2018
+```{r}
+print(carte_ab(shape_map = france, fill_map = df_dep_old$cl_jard, fill_color = couleurs,
+         fill_cat = cat_carte_jard, fill_title = "% jardins observés entre 2006 et 2018",
+         map_title = paste0("Carte de distribution des jardins avec présence de l'espèce ", sp_name)))
+
+
+```
+
+#### 2006-2024
+```{r}
+print(carte_ab(shape_map = france, fill_map = df_dep$cl_jard, fill_color = couleurs,
+         fill_cat = cat_carte_jard, fill_title = "% jardins observés entre 2006 et 2024",
+         map_title = paste0("Carte de distribution des jardins avec présence de l'espèce ", sp_name)))
+
+```
+
+:::
+
+::::
+
+# Phénologie inter-annuelle
+
+## Abondance relative
+
+:::panel-tabset
+### 2019-2024
+```{r}
+#| title: "Abondance de l'espèce et pression d'échantillonnage"
+
+datemin = as.Date("2019-01-01") - 7
+datemax = max(df_sp$session_date) + 7
+
+gg1 <- gg_histo(df_histo = df_ab_rel_freq_rel %>% filter(session_year >= 2019),
+                y = "sum_ab_rel", dmin = datemin, dmax = datemax,
+                ytxt = "Abondance relative", title = "Abondance relative par semaine")
+
+gg2 <- gg_line(df_line = df_nb_obs_date %>% filter(date >= "2019-01-01"),
+               dmin = datemin, dmax = datemax, ytxt = "Sessions",
+               title = "Nombre de sessions d'observation par semaine")
+
+grid.arrange(gg1, gg2, ncol = 1, heights=c(2, 1))
+
+```
+
+### 2006-2018
+```{r}
+#| title: "Abondance de l'espèce et pression d'échantillonnage"
+
+datemin = min(df_sp$session_date) - 7
+datemax = as.Date("2019-01-01") + 7
+
+gg1 <- gg_histo(df_histo = df_ab_rel_freq_rel %>% filter(session_year < 2019),
+                y = "sum_ab_rel", dmin = datemin, dmax = datemax,
+                ytxt = "Abondance relative", title = "Abondance relative par semaine")
+
+gg2 <- gg_line(df_line = df_nb_obs_date %>% filter(date < "2019-01-01"),
+               dmin = datemin, dmax = datemax, ytxt = "Sessions",
+               title = "Nombre de sessions d'observation par semaine")
+
+grid.arrange(gg1, gg2, ncol = 1, heights=c(2, 1))
+
+```
+
+### 2006-2024
+```{r}
+#| title: "Abondance de l'espèce et pression d'échantillonnage"
+
+datemin = min(df_sp$session_date) - 7
+datemax = max(df_sp$session_date) + 7
+
+gg1 <- gg_histo(df_histo = df_ab_rel_freq_rel,
+                y = "sum_ab_rel", dmin = datemin, dmax = datemax,
+                ytxt = "Abondance relative", title = "Abondance relative par semaine")
+
+gg2 <- gg_line(df_line = df_nb_obs_date, dmin = datemin, dmax = datemax, ytxt = "Sessions",
+               title = "Nombre de sessions d'observation par semaine")
+
+grid.arrange(gg1, gg2, ncol = 1, heights=c(2, 1))
+
+```
+
+:::
+
+## Texte explicatif
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+# Phénologie intra-annuelle {orientation="columns"}
+
+## Indicateurs relatifs {width="70%"}
+
+```{r}
+colfunc <- colorRampPalette(c("#a4dbff", "#0b6cab"))
+```
+
+::::panel-tabset
+### Fréquence relative
+:::panel-tabset
+#### 2019-2024
+```{r}
+vec_col = c(colfunc(length(unique(df_sp_new$session_year))-1), "#f40b0b")
+aes_echarts(plot_e = df_ab_rel_freq_rel_new %>%
+              group_by(session_year) %>%
+              e_charts(session_week) %>%
+              e_line(freq_rel, symbol='none'),
+            xlab = "Semaine de participation",
+            ylab = "Fréquence relative",
+            title = "Nombre d'observations par jardin chaque semaine selon les années",
+            line_color = vec_col)
+```
+
+#### 2006-2018
+```{r}
+vec_col = c(colfunc(length(unique(df_sp_old$session_year))-1), "#f40b0b")
+aes_echarts(plot_e = df_ab_rel_freq_rel_old %>%
+              group_by(session_year) %>%
+              e_charts(session_week) %>%
+              e_line(freq_rel, symbol='none'),
+            xlab = "Semaine de participation",
+            ylab = "Fréquence relative",
+            title = "Nombre d'observations par jardin chaque semaine selon les années",
+            line_color = vec_col)
+```
+
+#### 2006-2024
+```{r}
+vec_col = c(colfunc(length(unique(df_sp$session_year))-1), "#f40b0b")
+aes_echarts(plot_e = df_ab_rel_freq_rel %>%
+              group_by(session_year) %>%
+              e_charts(session_week) %>%
+              e_line(freq_rel, symbol='none'),
+            xlab = "Semaine de participation",
+            ylab = "Fréquence relative",
+            title = "Nombre d'observations par jardin chaque semaine selon les années",
+            line_color = vec_col)
+```
+
+:::
+### Abondance relative
+:::panel-tabset
+#### 2019-2024
+```{r}
+vec_col = c(colfunc(length(unique(df_sp_new$session_year))-1), "#f40b0b")
+aes_echarts(plot_e = df_ab_rel_freq_rel_new %>%
+              group_by(session_year) %>%
+              e_charts(session_week) %>%
+              e_line(sum_ab_rel, symbol='none'),
+            xlab = "Semaine de participation",
+            ylab = "Abondance relative",
+            title = "Abondance par session chaque semaine selon les années",
+            line_color = vec_col)
+```
+
+#### 2006-2018
+```{r}
+vec_col = c(colfunc(length(unique(df_sp_old$session_year))-1), "#f40b0b")
+aes_echarts(plot_e = df_ab_rel_freq_rel_old %>%
+              group_by(session_year) %>%
+              e_charts(session_week) %>%
+              e_line(sum_ab_rel, symbol='none'),
+            xlab = "Semaine de participation",
+            ylab = "Abondance relative",
+            title = "Abondance par session chaque semaine selon les années",
+            line_color = vec_col)
+```
+
+#### 2006-2024
+```{r}
+vec_col = c(colfunc(length(unique(df_sp$session_year))-1), "#f40b0b")
+aes_echarts(plot_e = df_ab_rel_freq_rel %>%
+              group_by(session_year) %>%
+              e_charts(session_week) %>%
+              e_line(sum_ab_rel, symbol='none'),
+            xlab = "Semaine de participation",
+            ylab = "Abondance relative",
+            title = "Abondance par session chaque semaine selon les années",
+            line_color = vec_col)
+```
+
+:::
+
+### Biogéorégions (fréquence relative)
+:::panel-tabset
+#### 2019-2024
+```{r}
+vec_col <- biogeoregions %>%
+  filter(CODE %in% unique(df_biogeo_new$CODE)) %>%
+  as.data.frame() %>% select(colours) %>% unlist() %>% unname()
+aes_echarts(plot_e = df_biogeo_new %>%
+              group_by(CODE) %>%
+              e_charts(session_week) %>%
+              e_line(freq_rel, symbol='none'),
+            xlab = "Semaine de participation",
+            ylab = "Fréquence relative",
+            title = "Fréquence par session chaque semaine selon les biogéorégions",
+            line_color = vec_col)
+```
+
+#### 2006-2018
+```{r}
+vec_col <- biogeoregions %>%
+  filter(CODE %in% unique(df_biogeo_old$CODE)) %>%
+  as.data.frame() %>% select(colours) %>% unlist() %>% unname()
+aes_echarts(plot_e = df_biogeo_old %>%
+              group_by(CODE) %>%
+              e_charts(session_week) %>%
+              e_line(freq_rel, symbol='none'),
+            xlab = "Semaine de participation",
+            ylab = "Fréquence relative",
+            title = "Fréquence par session chaque semaine selon les biogéorégions",
+            line_color = vec_col)
+```
+
+#### 2006-2024
+```{r}
+vec_col <- biogeoregions %>%
+  filter(CODE %in% unique(df_biogeo$CODE)) %>%
+  as.data.frame() %>% select(colours) %>% unlist() %>% unname()
+aes_echarts(plot_e = df_biogeo %>%
+              group_by(CODE) %>%
+              e_charts(session_month) %>%
+              e_line(freq_rel, symbol='none'),
+            xlab = "Mois de participation",
+            ylab = "Fréquence relative",
+            title = "Fréquence par session chaque semaine selon les biogéorégions",
+            line_color = vec_col, xmax=12, l1=3, l2=6, l3=9, l4=12) 
+```
+:::
+
+### Biogéorégions (abondance relative)
+:::panel-tabset
+#### 2019-2024
+```{r}
+vec_col <- biogeoregions %>%
+  filter(CODE %in% unique(df_biogeo_new$CODE)) %>%
+  as.data.frame() %>% select(colours) %>% unlist() %>% unname()
+aes_echarts(plot_e = df_biogeo_new %>%
+              group_by(CODE) %>%
+              e_charts(session_week) %>%
+              e_line(sum_ab_rel, symbol='none'),
+            xlab = "Semaine de participation",
+            ylab = "Abondance relative",
+            title = "Abondance par session chaque semaine selon les biogéorégions",
+            line_color = vec_col)
+```
+
+#### 2006-2018
+```{r}
+vec_col <- biogeoregions %>%
+  filter(CODE %in% unique(df_biogeo_old$CODE)) %>%
+  as.data.frame() %>% select(colours) %>% unlist() %>% unname()
+aes_echarts(plot_e = df_biogeo_old %>%
+              group_by(CODE) %>%
+              e_charts(session_week) %>%
+              e_line(sum_ab_rel, symbol='none'),
+            xlab = "Semaine de participation",
+            ylab = "Abondance relative",
+            title = "Abondance par session chaque semaine selon les biogéorégions",
+            line_color = vec_col)
+```
+
+#### 2006-2024
+```{r}
+vec_col <- biogeoregions %>%
+  filter(CODE %in% unique(df_biogeo$CODE)) %>%
+  as.data.frame() %>% select(colours) %>% unlist() %>% unname()
+aes_echarts(plot_e = df_biogeo %>%
+              group_by(CODE) %>%
+              e_charts(session_month) %>%
+              e_line(sum_ab_rel, symbol='none'),
+            xlab = "Mois de participation",
+            ylab = "Abondance relative",
+            title = "Abondance par session chaque semaine selon les biogéorégions",
+            line_color = vec_col, xmax=12, l1=3, l2=6, l3=9, l4=12) 
+```
+
+:::
+::::
+
+## Texte {width="30%"}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+Conseils sur période d'observation
+
+<!-- ####################################################################### -->
+
+# Grégarité {orientation="columns"}
+
+## Graphiques {width="60%"}
+
+### Classes d'abondance pour l'espèce
+```{r}
+histo_grega(df_grega = df_gregarite,
+            title = paste0("Distribution de la grégarité de l'espèce ", sp_name))
+```
+
+### Indice de grégarité par espèce
+```{r}
+names_grega = unique(df_gregarite_all %>% arrange(classif) %>% select(taxon) %>% as.data.frame())
+color_txt = rep("black", length(names_grega$taxon))
+position_sp = which(unique(names_grega$taxon) == sp_name)
+color_txt[position_sp] = "red"
+
+histo_indice_greg(df_greg_all = df_gregarite_all, color_txt = color_txt)
+```
+
+
+## Texte {width="40%"}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+::: {.callout-note icon=false}
+
+## Classes d'abondance pour l'espèce
+On calcule la proportion d'individus pour différentes catégorie de nombres d'individus.
+:::
+
+::: {.callout-note icon=false}
+
+## Indice de grégarité par espèce
+On calcule pour chaque espèce la proportion d'observations où on voit un seul individu et celle où on voit plus d'un individu ainsi que l'écart-type
+:::
+
+<!-- ####################################################################### -->
+
+# Jardins {orientation="columns"}
+
+## Graphiques
+
+::: panel-tabset
+```{r}
+#| results: asis
+#| fig-width: 6
+#| fig-height: 4
+for(i in 1:4) {
+  cat(sprintf(paste0("\n\n#### ",lst_param[[i]][[4]],"\n\n")))
+  
+  
+  df_tot = df_sp %>%
+     group_by(!!sym(lst_param[[i]][[1]])) %>%
+     summarise(nobs = n()) %>%
+     as.data.frame()
+  
+  df_obs = df_sp %>%
+     filter(taxon_count != 0) %>%
+     group_by(!!sym(lst_param[[i]][[1]])) %>%
+     summarise(nobs = n()) %>%
+     as.data.frame()
+  
+  if (length(setdiff(df_tot[,lst_param[[i]][[1]]],
+                     df_obs[,lst_param[[i]][[1]]] )) != 0) {
+    df_add = data.frame(distance = setdiff(df_tot[,lst_param[[i]][[1]]],
+                                           df_obs[,lst_param[[i]][[1]]] ),
+                        nobs = 0)
+    names(df_add)[1] = lst_param[[i]][[1]]
+    df_obs = rbind(df_obs, df_add)
+  }
+  
+  df_tot = df_tot %>%
+    left_join(df_obs, by = c(lst_param[[i]][[1]])) %>%
+    mutate(tot.x = sum(nobs.x),
+           tot.y = sum(nobs.y)) %>% 
+  group_by(!!sym(lst_param[[i]][[1]])) %>%
+  mutate(image = "data/img/papillon.png",
+         pvalue = (prop.test(x = c(nobs.x, nobs.y), n = c(tot.x, tot.y) ))$p.value,
+         signif = if_else(pvalue<0.05, "*", " "),
+         ratio = (nobs.y/tot.y)/(nobs.x/tot.x) )
+  
+  lim_y = 2
+  if (max(df_tot$ratio) > 2) {
+    lim_y = max(df_tot$ratio)*1.1
+  }
+  
+  cat_graph = cat_jard
+  if (lst_param[[i]][[1]] == "type_environnement") {
+    cat_graph = c("Rural", "Péri-urbain", "Urbain")
+  }
+  
+  print(graph_ratio_jardin(df_jard = df_tot, x = lst_param[[i]][[1]], y = "ratio",
+                     image = "image", signif = "signif", cat_jard = cat_graph,
+                     lim_y = lim_y, xlab = lst_param[[i]][[3]]))
+}
+```
+:::
+
+## Texte
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+# Test
+
+## Pic d'activité
+```{r}
+graph_pic(df_pic = df_date_wm_sqrt)
+```
+
+
+# Test Raster
+
+```{r}
+source("fonctions/function_raster.R")
+```
+
+
+## 10km cat year
+
+### 2006-2024
+```{r}
+grille_valeurs = create_df_raster(df_opj = df_sp, grille = grille10, carte = fr)
+```
+
+```{r}
+fct_raster(df = grille_valeurs, df_carte = fr, fill = "is.butterfly.2")
+```
+
+
+
