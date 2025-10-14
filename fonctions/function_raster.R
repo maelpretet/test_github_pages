@@ -17,11 +17,11 @@ grille10 <- st_make_grid(
   square = TRUE
 )
 
-grille20 <- st_make_grid(
-  fr,
-  cellsize = c(20000, 20000),
-  square = TRUE
-)
+# grille20 <- st_make_grid(
+#   fr,
+#   cellsize = c(20000, 20000),
+#   square = TRUE
+# )
 
 create_df_raster <- function(df_opj, grille = grille10, carte){
   df_coord = df_opj %>%
