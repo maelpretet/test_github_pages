@@ -4,6 +4,8 @@ library(here)
 library(quarto)
 library(stringr)
 
+print("flag1")
+
 # Fonctions
 if (Sys.getenv("CI") != "true") {
   readRenviron(".env")
@@ -26,6 +28,8 @@ if (Sys.getenv("CI") == "true") {
   #                       "Tabac d'Espagne", "Tircis", "Vulcain")
 }
 
+print("flag2")
+
 time = Sys.time()
 # Boucle sur les noms d'espèces
 for (sp_name in liste_principale) {
@@ -47,4 +51,4 @@ for (sp_name in liste_principale) {
   
 print(Sys.time() - time)
 
-
+print("flag3")
