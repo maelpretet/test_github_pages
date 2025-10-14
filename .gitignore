@@ -5,3 +5,5 @@
 *.RData
 *.Rproj
 .env
+docs/maquette*
+maquette_espece.html
