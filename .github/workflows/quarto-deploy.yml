@@ -34,9 +34,7 @@ jobs:
 
       # 3️⃣ Lance ton script R
       - name: Run R script to generate Quarto outputs
-        run: |
-          echo "Site pour debug : $SITE_NAME"
-          Rscript programs/boucle_quarto.R
+        run: Rscript programs/boucle_quarto.R
         
         # Nouvelle étape de vérification :
         # - name: Check if docs/ has been generated
