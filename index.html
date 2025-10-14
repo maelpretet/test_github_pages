@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accueil</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Choix du taxon</h1>
+  </header>
+
+  <main>
+    <div class="carousel">
+      <!-- Slide 1 -->
+      <div class="slide fade">
+        <a href="maquette_espece_Amaryllis.html">
+          <img src="img/Amaryllis.jpg" alt="Amaryllis">
+          <span class="caption">Amaryllis</span>
+        </a>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="slide fade">
+        <a href="maquette_espece_Belle-dame.html">
+          <img src="img/Belle-dame.jpg" alt="Belle-dame">
+          <span class="caption">Belle-dame</span>
+        </a>
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="slide fade">
+        <a href="maquette_espece_Paon du jour.html">
+          <img src="img/Paon du jour.jpg" alt="Paon du jour">
+          <span class="caption">Paon du jour</span>
+        </a>
+      </div>
+
+      <!-- Flèches de navigation -->
+      <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+      <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+
+    <!-- Petits points indicateurs -->
+    <div class="dots">
+      <span class="dot" onclick="currentSlide(1)"></span>
+      <span class="dot" onclick="currentSlide(2)"></span>
+      <span class="dot" onclick="currentSlide(3)"></span>
+    </div>
+  </main>
+
+  <script>
+    let slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) { showSlides(slideIndex += n); }
+    function currentSlide(n) { showSlides(slideIndex = n); }
+
+    function showSlides(n) {
+      const slides = document.getElementsByClassName("slide");
+      const dots = document.getElementsByClassName("dot");
+      if (n > slides.length) { slideIndex = 1 }
+      if (n < 1) { slideIndex = slides.length }
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      for (let i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+      }
+      slides[slideIndex-1].style.display = "block";
+      dots[slideIndex-1].className += " active";
+    }
+
+    /* ⬇️ plus d'autoplay : on a supprimé setInterval */
+  </script>
+</body>
+</html>
