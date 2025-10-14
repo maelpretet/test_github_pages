@@ -11,6 +11,9 @@ jobs:
 
     container:
       image: mpretet/image_fiche_opj:4.1.2
+      
+    env:
+      Site: ${{ secrets.Site }}
 
     steps:
       # 1️⃣ Récupère le code du dépôt
@@ -20,10 +23,27 @@ jobs:
       # 2️⃣ Nettoie la sortie (optionnel mais propre)
       # - name: Clean output folder
       #   run: rm -rf out/* || true
+      
+      # - name: Check R and Quarto installation
+      # run: |
+      #   which Rscript
+      #   Rscript --version
+      #   quarto --version || echo "️! Quarto non trouvé"
 
       # 3️⃣ Lance ton script R
       - name: Run R script to generate Quarto outputs
-        run: Rscript programs/boucle_quarto.R
+        run: |
+          echo "Site pour debug : $SITE_NAME"
+          Rscript programs/boucle_quarto.R
+        
+        # Nouvelle étape de vérification :
+        # - name: Check if docs/ has been generated
+        # run: |
+        #   echo "Contenu du dossier docs/"
+        #   ls -l docs/
+        #   echo "--------------------------------"
+        #   echo "📄 Fichiers Quarto trouvés :"
+        #   find docs/ -type f -name "*.html" || echo "Aucun fichier HTML trouvé"
 
       # 4️⃣ (Optionnel) Upload des fichiers comme artifact
       - name: Upload build artifacts
