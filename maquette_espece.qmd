@@ -22,7 +22,7 @@ execute:
 # Variables constantes
 sp_name = params$sp_name
 source("fonctions/var.R")
-is.histo = FALSE
+is.histo = TRUE
 ```
 
 <!-- ####################################################################### -->
