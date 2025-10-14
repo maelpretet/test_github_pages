@@ -39,14 +39,14 @@ if (!exists("req")) {
 
 # - Données historiques
 # print("Requête des données ensemble de la période")
-# if (!exists("req_old")) {
-#   req_old <- GET(
-#     paste0(Sys.getenv('SITE_NAME'), "export_opj_history.csv"),
-#     authenticate(Sys.getenv('FTP_USER'), Sys.getenv('FTP_PASSWORD'), type = "basic")
-#   )
-# }
+if (!exists("req_old")) {
+  req_old <- GET(
+    paste0(Sys.getenv('SITE_NAME'), "export_opj_history.csv"),
+    authenticate(Sys.getenv('FTP_USER'), Sys.getenv('FTP_PASSWORD'), type = "basic")
+  )
+}
 
 ### Dataframe des données pour toutes les espèces
 # -----------------------------------------------
 df_data <- readr::read_csv2(content(req, "raw"))
-# df_old_data <- readr::read_csv2(content(req_old, "raw"))
+df_old_data <- readr::read_csv2(content(req_old, "raw"))
