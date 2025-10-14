@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: mon_docker/image_docker:2
+      image: mpretet/image_fiche_opj:4.1.2
 
     steps:
       # 1️⃣ Récupère le code du dépôt
