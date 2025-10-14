@@ -13,7 +13,9 @@ jobs:
       image: mpretet/image_fiche_opj:4.1.2
       
     env:
-      Site: ${{ secrets.Site }}
+      SITE_NAME: ${{ secrets.SITE_NAME }}
+      FTP_USER: ${{ secrets.FTP_USER }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
 
     steps:
       # 1️⃣ Récupère le code du dépôt
