@@ -37,7 +37,7 @@ for (sp_name in liste_principale) {
                   execute_params = list("sp_name" = sp_name),
                   output_file = filename)
 
-    file.rename(filename, file.path("out", filename))
+    file.rename(filename, file.path("docs", filename))
 
   }, error = function(e) {
     message(sprintf("Error rendering document_%s.qmd: %s", sp_name, e$message))
