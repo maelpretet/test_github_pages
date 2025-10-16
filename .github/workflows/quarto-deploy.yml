@@ -3,7 +3,7 @@ name: Build and Deploy Quarto (Docker)
 on:
   workflow_dispatch:        # Permet un lancement manuel
   schedule:
-    - cron: '0 0 1 * *'     # (optionnel) exécution automatique à 3h UTC
+    - cron: '0 0 1 * *'   
 
 jobs:
   render-and-deploy:
@@ -18,43 +18,24 @@ jobs:
       FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
 
     steps:
-      # 1️⃣ Récupère le code du dépôt
+      # Récupération du code du dépôt
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Nettoie la sortie (optionnel mais propre)
-      # - name: Clean output folder
-      #   run: rm -rf out/* || true
-      
-      # - name: Check R and Quarto installation
-      # run: |
-      #   which Rscript
-      #   Rscript --version
-      #   quarto --version || echo "️! Quarto non trouvé"
-
-      # 3️⃣ Lance ton script R
+      # Lancement du script R
       - name: Run R script to generate Quarto outputs
         run: Rscript programs/boucle_quarto.R
-        
-        # Nouvelle étape de vérification :
-        # - name: Check if docs/ has been generated
-        # run: |
-        #   echo "Contenu du dossier docs/"
-        #   ls -l docs/
-        #   echo "--------------------------------"
-        #   echo "📄 Fichiers Quarto trouvés :"
-        #   find docs/ -type f -name "*.html" || echo "Aucun fichier HTML trouvé"
 
-      # 4️⃣ (Optionnel) Upload des fichiers comme artifact
+      # Upload des fichiers comme artéfacts
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: quarto-output
           path: docs/
           overwrite: true
-          retention-days: 30
+          retention-days: 40
 
-      # 5️⃣ Déploiement automatique sur GitHub Pages
+      # Déploiement automatique sur GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
